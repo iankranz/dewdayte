@@ -1,10 +1,10 @@
 import { api } from "@/utils/api";
 
-export default function JoinRoomPage() {
-  const room = api.room.create.useMutation();
+export default function JoinSpacePage() {
+  const space = api.space.create.useMutation();
 
-  function createRoom() {
-    room.mutate({ name: "test room" });
+  function createSpace() {
+    space.mutate({ name: "test space" });
   }
   return (
     <>
@@ -14,9 +14,9 @@ export default function JoinRoomPage() {
             <span className="text-[hsl(280,100%,70%)]">dewdayte</span>
           </h1>
           <p className="text-2xl text-white">
-            {room.data ? room.data.id : "Loading tRPC query..."}
+            {space.data ? space.data.id : "Loading tRPC query..."}
           </p>
-          <button className="text-white" onClick={createRoom}>
+          <button className="text-white" onClick={createSpace}>
             the join page
           </button>
         </div>

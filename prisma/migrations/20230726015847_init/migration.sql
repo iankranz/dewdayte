@@ -1,12 +1,5 @@
 -- CreateTable
-CREATE TABLE "Example" (
-    "id" TEXT NOT NULL PRIMARY KEY,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "Room" (
+CREATE TABLE "Space" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
@@ -20,6 +13,6 @@ CREATE TABLE "Task" (
     "updatedAt" DATETIME NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "roomId" TEXT NOT NULL,
-    CONSTRAINT "ToDo_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "Room" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "spaceId" TEXT NOT NULL,
+    CONSTRAINT "Task_spaceId_fkey" FOREIGN KEY ("spaceId") REFERENCES "Space" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );

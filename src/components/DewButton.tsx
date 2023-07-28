@@ -1,9 +1,11 @@
 export default function DewButton({
   type,
   children,
+  handleClick,
 }: {
   type: "primary" | "secondary";
   children: React.ReactNode;
+  handleClick?: () => void;
 }) {
   const bgClass = type === "primary" ? "bg-pewrple" : "bg-transparent";
 
@@ -14,7 +16,8 @@ export default function DewButton({
 
   return (
     <button
-      className={`w-full rounded-lg border-2 px-8 py-4 font-spline text-white ${bgClass} ${textColorClass} ${borderClass}`}
+      className={`w-full rounded-lg border-2 px-8 py-4 font-spline ${bgClass} ${textColorClass} ${borderClass}`}
+      onClick={handleClick}
     >
       {children}
     </button>

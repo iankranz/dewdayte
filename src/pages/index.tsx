@@ -16,11 +16,16 @@ export default function Home() {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             <span className="text-pewrple">dewdayte</span>
           </h1>
+          <h2 className="font-spline text-3xl font-bold">
+            get things done
+            <br />
+            (on time)
+          </h2>
           <div className="flex w-72 flex-col gap-8">
-            <Link href="/room/create">
+            <Link href="/space/create">
               <DewButton type="primary">create a new space</DewButton>
             </Link>
-            <Link href="/room/join">
+            <Link href="/space/join">
               <DewButton type="secondary">join existing space</DewButton>
             </Link>
           </div>
