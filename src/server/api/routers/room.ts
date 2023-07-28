@@ -14,6 +14,16 @@ export const roomRouter = createTRPCRouter({
         id: room.id,
       };
     }),
+  get: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const room = await ctx.prisma.room.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+      return room;
+    }),
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.example.findMany();
   }),

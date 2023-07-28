@@ -1,8 +1,10 @@
 import { api } from "@/utils/api";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function CreateRoomPage() {
+  const router = useRouter();
   const room = api.room.create.useMutation();
 
   const [name, setName] = useState<string | null>(null);
@@ -16,6 +18,11 @@ export default function CreateRoomPage() {
     const target = e.target as HTMLInputElement;
     setName(target.value);
   }
+
+  useEffect(() => {
+    if (!room.data) return;
+    router.push(`/room/${room.data.id}`).catch((err) => console.error(err));
+  }, [room.data, router]);
 
   return (
     <>
@@ -31,9 +38,6 @@ export default function CreateRoomPage() {
           <button className="text-white" onClick={createRoom}>
             create
           </button>
-          <p className="text-2xl text-white">
-            {room.data ? room.data.id : "no room id"}
-          </p>
         </div>
       </main>
     </>
