@@ -1,8 +1,36 @@
 import Head from "next/head";
 import Link from "next/link";
 import DewButton from "@/components/DewButton";
+import { useEffect, useState } from "react";
+
+interface Space {
+  id: string;
+  name: string;
+}
 
 export default function Home() {
+  const [spaces, setSpaces] = useState<Space[]>([]);
+
+  useEffect(() => {
+    const data = window.localStorage.getItem("my-spaces");
+    let mySpaces = [] as Space[];
+    if (data) {
+      const parsedData = JSON.parse(data) as { spaces: Space[] | undefined };
+      if (parsedData.spaces) {
+        mySpaces = parsedData.spaces;
+      }
+    }
+    setSpaces(mySpaces);
+  }, []);
+
+  const spacesList = spaces.map((space) => {
+    return (
+      <li key={space.id}>
+        <Link href={`/space/${space.id}`}>{space.name}</Link>
+      </li>
+    );
+  });
+
   return (
     <>
       <Head>
@@ -16,17 +44,20 @@ export default function Home() {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             <span className="text-pewrple">dewdayte</span>
           </h1>
+          {Boolean(spaces.length) && (
+            <div>
+              <p>my spaces</p>
+              <ul>{spacesList}</ul>
+            </div>
+          )}
           <h2 className="font-spline text-3xl font-bold">
-            get things done
+            get sh*t done
             <br />
             (on time)
           </h2>
           <div className="flex w-72 flex-col gap-8">
             <Link href="/space/create">
               <DewButton type="primary">create a new space</DewButton>
-            </Link>
-            <Link href="/space/join">
-              <DewButton type="secondary">join existing space</DewButton>
             </Link>
           </div>
         </div>
