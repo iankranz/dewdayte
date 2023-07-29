@@ -52,11 +52,6 @@ export default function CreateSpacePage() {
           <p className="text-2xl">
             Welcome to {space.data ? space.data.name : "no space name"}
           </p>
-          <p>This is a space</p>
-          <p className="text-center">
-            The id of this space is:{" "}
-            {space.data ? space.data.id : "no space id"}
-          </p>
           <Link href="/">
             <DewButton type="primary">exit</DewButton>
           </Link>
