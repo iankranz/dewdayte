@@ -29,4 +29,4 @@ After that, you should be able to explore the app in its current state!
 
 ## Can I work on it?
 
-Good question! I'm the only developer working on the project for now, but I'd be happy to onboard anyone who is interested in contributing. You can reach out to me via Twitter [@iankranz][https://twitter.com/iankranz]
+Good question! I'm the only developer working on the project for now, but I'd be happy to onboard anyone who is interested in contributing. You can reach out to me via Twitter [@iankranz](https://twitter.com/iankranz)
