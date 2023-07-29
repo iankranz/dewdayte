@@ -37,7 +37,7 @@ export default function CreateSpacePage() {
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             <Link href="/">
-              <span className="text-pewrple">dewdayte</span>
+              <span className="text-brand-purple">dewdayte</span>
             </Link>
           </h1>
           <div className="flex w-72 flex-col gap-4">

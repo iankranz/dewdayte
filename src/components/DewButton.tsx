@@ -7,12 +7,13 @@ export default function DewButton({
   children: React.ReactNode;
   handleClick?: () => void;
 }) {
-  const bgClass = type === "primary" ? "bg-pewrple" : "bg-transparent";
+  const bgClass = type === "primary" ? "bg-brand-purple" : "bg-transparent";
 
-  const textColorClass = type === "primary" ? "text-white" : "text-pewrple";
+  const textColorClass =
+    type === "primary" ? "text-white" : "text-brand-purple";
 
   const borderClass =
-    type === "primary" ? "border-transparent" : "border-pewrple";
+    type === "primary" ? "border-transparent" : "border-brand-purple";
 
   return (
     <button

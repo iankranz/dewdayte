@@ -11,6 +11,8 @@ interface Space {
 export default function Home() {
   const [spaces, setSpaces] = useState<Space[]>([]);
 
+  const testSpaceId = "clkn7tzs00008umocjphxpm67";
+
   useEffect(() => {
     const data = window.localStorage.getItem("my-spaces");
     let mySpaces = [] as Space[];
@@ -25,7 +27,7 @@ export default function Home() {
 
   const spacesList = spaces.map((space) => {
     return (
-      <li key={space.id}>
+      <li key={space.id} className="text-brand-purple">
         <Link href={`/space/${space.id}`}>{space.name}</Link>
       </li>
     );
@@ -40,13 +42,15 @@ export default function Home() {
       </Head>
       {/* <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]"></div> */}
       <main className="flex min-h-screen flex-col items-center justify-center">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            <span className="text-pewrple">dewdayte</span>
-          </h1>
+        <div className="container flex flex-col justify-center gap-12 px-4 py-16 ">
+          <div className="flex w-full justify-center">
+            <h1 className="text-5xl font-extrabold text-brand-purple">
+              dewdayte
+            </h1>
+          </div>
           {Boolean(spaces.length) && (
-            <div>
-              <p>my spaces</p>
+            <div className="w-full bg-grey-lightest">
+              <p>your spaces</p>
               <ul>{spacesList}</ul>
             </div>
           )}
@@ -55,9 +59,15 @@ export default function Home() {
             <br />
             (on time)
           </h2>
-          <div className="flex w-72 flex-col gap-8">
+          <div className="flex w-full flex-col gap-8">
             <Link href="/space/create">
               <DewButton type="primary">create a new space</DewButton>
+            </Link>
+          </div>
+          <div className="w-full rounded-xl bg-midnight-purple p-6">
+            <p className="text-white">just want to test it out?</p>
+            <Link href={`/space/${testSpaceId}`}>
+              <DewButton type="primary">join the demo space</DewButton>
             </Link>
           </div>
         </div>
