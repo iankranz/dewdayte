@@ -3,17 +3,36 @@ export default function DewButton({
   children,
   handleClick,
 }: {
-  type: "primary" | "secondary";
+  type: "primary" | "secondary" | "tertiary" | "surface-light";
   children: React.ReactNode;
   handleClick?: () => void;
 }) {
-  const bgClass = type === "primary" ? "bg-brand-purple" : "bg-transparent";
+  let bgClass = "";
+  let textColorClass = "";
+  let borderClass = "";
 
-  const textColorClass =
-    type === "primary" ? "text-white" : "text-brand-purple";
-
-  const borderClass =
-    type === "primary" ? "border-transparent" : "border-brand-purple";
+  switch (type) {
+    case "primary":
+      bgClass = "bg-brand-purple";
+      textColorClass = "text-white";
+      borderClass = "border-transparent";
+      break;
+    case "secondary":
+      bgClass = "bg-transparent";
+      textColorClass = "text-brand-purple";
+      borderClass = "border-brand-purple";
+      break;
+    case "tertiary":
+      bgClass = "bg-transparent";
+      textColorClass = "text-brand-purple";
+      borderClass = "border-transparent";
+      break;
+    case "surface-light":
+      bgClass = "bg-white";
+      textColorClass = "text-near-black";
+      borderClass = "border-transparent";
+      break;
+  }
 
   return (
     <button
