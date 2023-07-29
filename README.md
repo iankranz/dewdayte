@@ -1,28 +1,32 @@
-# Create T3 App
+# dewdayte
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+dewdayte is a no-fills productivity application for getting sh\*t done. It allows users to create Spaces where they can organize Tasks. A Task can be anything from "pick up some groceries" to "refactor the local storage logic into a custom hook". It's whatever you want!
 
-## What's next? How do I make an app with this?
+The app is currently in development, but it's my main side-project. You'll see I've been making tons of commits here.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## How is it being built?
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+As a full stack application, dewdayte makes use of some really cool modern tools including:
 
 - [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
 - [Prisma](https://prisma.io)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 
-## Learn More
+This repo contains the whole application, and the front and back ends are both written in typescript (hooray!), so it's easy to work rapidly across the stack.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## How can I check it out?
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+This repo is public, so you can look through the code all you like. If you want to run it locally, you can follow these steps:
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+1. Clone the repo
+2. Install dependencies with `npm install` (make sure you have node installed on your machine)
+3. Run `npx prisma db push` to apply migrations to your database
+4. Run `npm run dev` to start the project
+5. Open the `localhost` link shown in your terminal
 
-## How do I deploy this?
+After that, you should be able to explore the app in its current state!
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## Can I work on it?
+
+Good question! I'm the only developer working on the project for now, but I'd be happy to onboard anyone who is interested in contributing. You can reach out to me via Twitter [@iankranz][https://twitter.com/iankranz]
