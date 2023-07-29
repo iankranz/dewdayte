@@ -24,7 +24,4 @@ export const spaceRouter = createTRPCRouter({
       });
       return room;
     }),
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.example.findMany();
-  }),
 });
