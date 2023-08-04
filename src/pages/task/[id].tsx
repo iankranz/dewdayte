@@ -2,7 +2,8 @@ import Link from "next/link";
 import { api } from "@/utils/api";
 import { useRouter } from "next/router";
 import DewButton from "@/components/DewButton";
-import DewTextInput from "@/components/DewTextInput";
+import TaskViewPanel from "@/components/TaskViewPanel";
+import TaskEditForm from "@/components/TaskEditForm";
 import { useState, useEffect } from "react";
 
 export default function SpacePage() {
@@ -20,20 +21,55 @@ export default function SpacePage() {
     }
   }, [router.query.edit]);
 
+  function handleFormDiscard() {
+    setMode("view");
+  }
+
+  function handleFormSubmit(
+    name: string,
+    dueCategory: string,
+    description: string
+  ) {
+    console.log("name: ", name);
+    console.log("due category: ", dueCategory);
+    console.log("description: ", description);
+    return;
+  }
+
+  function handleEditClick() {
+    setMode("edit");
+  }
+
   return (
     <>
       <main className="flex min-h-screen flex-col p-6">
         <div className="flex justify-between">
-          <Link href={`/space/${task.data?.spaceId}`}>leave</Link>
-          <DewButton type="primary">edit</DewButton>
+          {mode === "edit" ? (
+            <h1 className="mb-8 font-spline text-2xl text-near-black">
+              edit task
+            </h1>
+          ) : (
+            <>
+              <Link href={`/space/${task.data?.spaceId}`}>leave</Link>
+              <DewButton type="secondary" handleClick={handleEditClick}>
+                edit
+              </DewButton>
+            </>
+          )}
         </div>
-        <h1>{task.data ? task.data.id : "Loading..."}</h1>
-        {mode === "edit" ? <input /> : <span>Name</span>}
-        <span>Due</span>
-        <span>Description</span>
-        <span>
-          powered by <span className="text-brand-purple">dewdayte</span>
-        </span>
+        {mode === "edit" ? (
+          <TaskEditForm
+            handleFormDiscard={handleFormDiscard}
+            handleFormSubmit={handleFormSubmit}
+          />
+        ) : (
+          <TaskViewPanel />
+        )}
+        <div className="flex grow flex-col items-center justify-end">
+          <span>
+            powered by <span className="text-brand-purple">dewdayte</span>
+          </span>
+        </div>
       </main>
     </>
   );
