@@ -1,4 +1,5 @@
 import { spaceRouter } from "./routers/space";
+import { taskRouter } from "./routers/task";
 import { createTRPCRouter } from "@/server/api/trpc";
 
 /**
@@ -8,6 +9,7 @@ import { createTRPCRouter } from "@/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   space: spaceRouter,
+  task: taskRouter,
 });
 
 // export type definition of API

@@ -4,17 +4,18 @@ import { useRouter } from "next/router";
 import DewButton from "@/components/DewButton";
 import { useEffect } from "react";
 
-type Space = {
+interface Space {
   id: string;
   name: string;
-};
+}
 
-export default function CreateSpacePage() {
+export default function SpacePage() {
   const router = useRouter();
 
   const spaceId = (router.query.id ?? null) as string | null;
 
   const space = api.space.get.useQuery({ id: spaceId ?? "" });
+  const room = api.task.create.useMutation();
 
   useEffect(() => {
     if (!space.data?.id || !space.data?.name) return;
@@ -40,22 +41,36 @@ export default function CreateSpacePage() {
     );
   }, [space.data?.id, space.data?.name]);
 
+  function handleNewClick() {
+    if (!spaceId) return;
+    room
+      .mutateAsync({
+        spaceId: spaceId,
+      })
+      .then((res) => {
+        router.push(`/task/${res.id}`).catch((err) => {
+          console.error(err);
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
   return (
     <>
-      <main className="flex min-h-screen flex-col items-center justify-center">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            <Link href="/">
-              <span className="text-brand-purple">dewdayte</span>
-            </Link>
-          </h1>
-          <p className="text-2xl">
-            Welcome to {space.data ? space.data.name : "no space name"}
-          </p>
-          <Link href="/">
-            <DewButton type="primary">exit</DewButton>
-          </Link>
+      <main className="flex min-h-screen flex-col p-6">
+        <div className="flex justify-between">
+          <Link href="/">leave</Link>
+          <DewButton type="primary" handleClick={handleNewClick}>
+            +new
+          </DewButton>
         </div>
+        <h1>{space.data ? space.data.name : "Loading..."}</h1>
+        <div className="h-24 w-full bg-spray"></div>
+        <span>
+          powered by <span className="text-brand-purple">dewdayte</span>
+        </span>
       </main>
     </>
   );
