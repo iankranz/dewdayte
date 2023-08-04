@@ -48,7 +48,7 @@ export default function SpacePage() {
         spaceId: spaceId,
       })
       .then((res) => {
-        router.push(`/task/${res.id}`).catch((err) => {
+        router.push(`/task/${res.id}?edit=true`).catch((err) => {
           console.error(err);
         });
       })
