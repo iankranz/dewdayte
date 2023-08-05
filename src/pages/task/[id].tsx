@@ -31,8 +31,7 @@ export default function TaskPage() {
     updateTask({ name, dueCategory, description })
       .then(() => {
         if (!taskId) return;
-        setMode("view");
-        router.replace(`/task/${taskId}`).catch((e) => {
+        router.replace(`/space/${task?.spaceId}`).catch((e) => {
           console.error(e);
         });
       })
