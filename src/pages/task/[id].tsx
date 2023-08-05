@@ -13,7 +13,8 @@ export default function SpacePage() {
 
   const taskId = (router.query.id ?? null) as string | null;
 
-  const task = api.task.get.useQuery({ id: taskId ?? "" });
+  const getTaskQuery = api.task.get.useQuery({ id: taskId ?? "" });
+  const updateTaskMutation = api.task.update.useMutation();
 
   useEffect(() => {
     if (router.query.edit == "true") {
@@ -30,10 +31,32 @@ export default function SpacePage() {
     dueCategory: string,
     description: string
   ) {
-    console.log("name: ", name);
-    console.log("due category: ", dueCategory);
-    console.log("description: ", description);
-    return;
+    if (!taskId) return;
+    let dbDueCategory: "TODAY" | "THIS_WEEK" | "THIS_MONTH" = "TODAY";
+    switch (dueCategory) {
+      case "THIS_WEEK":
+        dbDueCategory = "THIS_WEEK";
+        break;
+      case "THIS_MONTH":
+        dbDueCategory = "THIS_MONTH";
+        break;
+      default:
+        dbDueCategory = "TODAY";
+    }
+
+    updateTaskMutation
+      .mutateAsync({
+        id: taskId,
+        name,
+        dueCategory: dbDueCategory,
+        description,
+      })
+      .then((res) => {
+        setMode("view");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function handleEditClick() {
@@ -50,7 +73,7 @@ export default function SpacePage() {
             </h1>
           ) : (
             <>
-              <Link href={`/space/${task.data?.spaceId}`}>leave</Link>
+              <Link href={`/space/${getTaskQuery.data?.spaceId}`}>leave</Link>
               <DewButton type="secondary" handleClick={handleEditClick}>
                 edit
               </DewButton>
