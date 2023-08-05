@@ -3,6 +3,7 @@ import { api } from "@/utils/api";
 import { useRouter } from "next/router";
 import DewButton from "@/components/DewButton";
 import { useEffect } from "react";
+import TaskListItem from "@/components/TaskListItem";
 
 interface Space {
   id: string;
@@ -16,6 +17,7 @@ export default function SpacePage() {
 
   const space = api.space.get.useQuery({ id: spaceId ?? "" });
   const room = api.task.create.useMutation();
+  const getTasksQuery = api.space.getTasks.useQuery({ id: spaceId ?? "" });
 
   useEffect(() => {
     if (!space.data?.id || !space.data?.name) return;
@@ -60,14 +62,30 @@ export default function SpacePage() {
   return (
     <>
       <main className="flex min-h-screen flex-col p-6">
-        <div className="flex justify-between">
-          <Link href="/">leave</Link>
-          <DewButton type="primary" handleClick={handleNewClick}>
+        <div className="mb-6 flex items-center justify-between">
+          <Link href="/">
+            <span className="font-spline text-brand-purple">&larr;leave</span>
+          </Link>
+          <DewButton
+            type="primary"
+            padding="sm"
+            width="fit"
+            handleClick={handleNewClick}
+          >
             +new
           </DewButton>
         </div>
-        <h1>{space.data ? space.data.name : "Loading..."}</h1>
-        <div className="h-24 w-full bg-spray"></div>
+        <h1 className="mb-12 font-spline text-2xl">
+          {space.data ? space.data.name : "Loading..."}
+        </h1>
+        <h2 className="mb-3">today</h2>
+        {getTasksQuery.data && (
+          <div className="flex flex-col gap-4">
+            {getTasksQuery.data.tasks.map((task) => {
+              return <TaskListItem task={task} key={task.id} />;
+            })}
+          </div>
+        )}
         <span>
           powered by <span className="text-brand-purple">dewdayte</span>
         </span>

@@ -24,4 +24,12 @@ export const spaceRouter = createTRPCRouter({
       });
       return room;
     }),
+  getTasks: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const tasks = await ctx.prisma.task.findMany({
+        where: { spaceId: input.id },
+      });
+      return { tasks };
+    }),
 });
