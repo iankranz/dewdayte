@@ -1,20 +1,17 @@
 import Link from "next/link";
-import { api } from "@/utils/api";
 import { useRouter } from "next/router";
 import DewButton from "@/components/DewButton";
 import TaskViewPanel from "@/components/TaskViewPanel";
 import TaskEditForm from "@/components/TaskEditForm";
 import { useState, useEffect } from "react";
+import { useTask } from "@/hooks/useTask";
 
-export default function SpacePage() {
+export default function TaskPage() {
   const router = useRouter();
+  const taskId = (router.query.id ?? null) as string | null;
+  const { task, updateTask } = useTask(taskId);
 
   const [mode, setMode] = useState<"view" | "edit">("view");
-
-  const taskId = (router.query.id ?? null) as string | null;
-
-  const getTaskQuery = api.task.get.useQuery({ id: taskId ?? "" });
-  const updateTaskMutation = api.task.update.useMutation();
 
   useEffect(() => {
     if (router.query.edit == "true") {
@@ -27,36 +24,29 @@ export default function SpacePage() {
   }
 
   function handleFormSubmit(
-    name: string,
+    name: string | null,
     dueCategory: string,
-    description: string
+    description: string | null
   ) {
-    if (!taskId) return;
-    let dbDueCategory: "TODAY" | "THIS_WEEK" | "THIS_MONTH" = "TODAY";
-    switch (dueCategory) {
-      case "THIS_WEEK":
-        dbDueCategory = "THIS_WEEK";
-        break;
-      case "THIS_MONTH":
-        dbDueCategory = "THIS_MONTH";
-        break;
-      default:
-        dbDueCategory = "TODAY";
-    }
-
-    updateTaskMutation
-      .mutateAsync({
-        id: taskId,
-        name,
-        dueCategory: dbDueCategory,
-        description,
-      })
-      .then((res) => {
+    updateTask({ name, dueCategory, description })
+      .then(() => {
+        if (!taskId) return;
         setMode("view");
+        router.replace(`/task/${taskId}`).catch((e) => {
+          console.error(e);
+        });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((e) => {
+        console.error(e);
       });
+  }
+
+  function handleDueCategoryChange(value: string) {
+    updateTask({
+      name: task?.name ?? null,
+      dueCategory: value,
+      description: task?.description ?? null,
+    }).catch((e) => console.error(e));
   }
 
   function handleEditClick() {
@@ -66,27 +56,36 @@ export default function SpacePage() {
   return (
     <>
       <main className="flex min-h-screen flex-col p-6">
-        <div className="flex justify-between">
-          {mode === "edit" ? (
-            <h1 className="mb-8 font-spline text-2xl text-near-black">
-              edit task
-            </h1>
-          ) : (
-            <>
-              <Link href={`/space/${getTaskQuery.data?.spaceId}`}>leave</Link>
-              <DewButton type="secondary" handleClick={handleEditClick}>
-                edit
-              </DewButton>
-            </>
-          )}
-        </div>
+        {mode === "edit" ? (
+          <h1 className="mb-8 font-spline text-2xl text-near-black">
+            edit task
+          </h1>
+        ) : (
+          <div className="mb-6 flex items-center justify-between">
+            <Link href={`/space/${task?.spaceId}`}>
+              <span className="text-brand-purple">&larr;</span>
+            </Link>
+            <DewButton
+              type="secondary"
+              handleClick={handleEditClick}
+              width="fit"
+              padding="sm"
+            >
+              edit
+            </DewButton>
+          </div>
+        )}
         {mode === "edit" ? (
           <TaskEditForm
+            task={task}
             handleFormDiscard={handleFormDiscard}
             handleFormSubmit={handleFormSubmit}
           />
         ) : (
-          <TaskViewPanel />
+          <TaskViewPanel
+            task={task}
+            handleDueCategoryChange={handleDueCategoryChange}
+          />
         )}
         <div className="flex grow flex-col items-center justify-end">
           <span>

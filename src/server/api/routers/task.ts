@@ -18,12 +18,12 @@ export const taskRouter = createTRPCRouter({
   get: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const room = await ctx.prisma.task.findUnique({
+      const task = await ctx.prisma.task.findUnique({
         where: {
           id: input.id,
         },
       });
-      return room;
+      return task;
     }),
   update: publicProcedure
     .input(

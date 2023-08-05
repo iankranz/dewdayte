@@ -1,28 +1,31 @@
 import DewButton from "./DewButton";
 import DewTextInput from "./DewTextInput";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DewTextArea from "./DewTextArea";
 import DewRadioInput from "./DewRadioInput";
+import { type Task } from "@/hooks/useTask";
 
 export default function TaskEditPanel({
+  task,
   handleFormSubmit,
   handleFormDiscard,
 }: {
+  task: Task | null;
   handleFormSubmit: (
-    name: string,
+    name: string | null,
     dueCategory: string,
-    description: string
+    description: string | null
   ) => void;
   handleFormDiscard: () => void;
 }) {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [dueCategory, setDueCategory] = useState("today");
+  const [name, setName] = useState(task?.name ?? "");
+  const [description, setDescription] = useState(task?.description ?? "");
+  const [dueCategory, setDueCategory] = useState("TODAY");
 
   const dueCategories = [
-    { id: "today-radio-item", label: "today", value: "today" },
-    { id: "this-week-radio-item", label: "this week", value: "this-week" },
-    { id: "this-month-radio-item", label: "this month", value: "this-month" },
+    { id: "today-radio-item", label: "today", value: "TODAY" },
+    { id: "this-week-radio-item", label: "this week", value: "THIS_WEEK" },
+    { id: "this-month-radio-item", label: "this month", value: "THIS_MONTH" },
   ];
 
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -43,6 +46,17 @@ export default function TaskEditPanel({
 
   function handleDiscardClick() {
     handleFormDiscard();
+  }
+
+  useEffect(() => {
+    if (!task) return;
+    setName(task.name ?? "");
+    setDueCategory(task.dueCategory ?? "TODAY");
+    setDescription(task.description ?? "");
+  }, [task]);
+
+  if (!task) {
+    return <div>Loading...</div>;
   }
 
   return (
