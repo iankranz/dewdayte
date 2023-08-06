@@ -86,9 +86,11 @@ export default function SpacePage() {
             })}
           </div>
         )}
-        <span>
-          powered by <span className="text-brand-purple">dewdayte</span>
-        </span>
+        <div className="flex grow flex-col items-center justify-end">
+          <span>
+            powered by <span className="text-brand-purple">dewdayte</span>
+          </span>
+        </div>
       </main>
     </>
   );
