@@ -3,7 +3,8 @@ import { api } from "@/utils/api";
 import { useRouter } from "next/router";
 import DewButton from "@/components/DewButton";
 import { useEffect } from "react";
-import TaskListItem from "@/components/TaskListItem";
+import { useSpaceTasks } from "@/hooks/useSpaceTasks";
+import TaskList from "@/components/TaskList";
 
 interface Space {
   id: string;
@@ -15,9 +16,11 @@ export default function SpacePage() {
 
   const spaceId = (router.query.id ?? null) as string | null;
 
+  const { todayTasks, thisMonthTasks, thisWeekTasks, toggleTaskComplete } =
+    useSpaceTasks(spaceId);
+
   const space = api.space.get.useQuery({ id: spaceId ?? "" });
   const room = api.task.create.useMutation();
-  const getTasksQuery = api.space.getTasks.useQuery({ id: spaceId ?? "" });
 
   useEffect(() => {
     if (!space.data?.id || !space.data?.name) return;
@@ -78,15 +81,38 @@ export default function SpacePage() {
         <h1 className="mb-12 font-spline text-2xl">
           {space.data ? space.data.name : "Loading..."}
         </h1>
-        <h2 className="mb-3">today</h2>
-        {getTasksQuery.data && (
-          <div className="flex flex-col gap-4">
-            {getTasksQuery.data.tasks.map((task) => {
-              return <TaskListItem task={task} key={task.id} />;
-            })}
-          </div>
-        )}
-        <div className="flex grow flex-col items-center justify-end">
+        <div className="flex flex-col gap-12">
+          {todayTasks && (
+            <TaskList
+              label="today"
+              tasks={todayTasks}
+              handleTaskCompleteToggle={(task) => {
+                toggleTaskComplete(task).catch((e) => console.error(e));
+              }}
+            />
+          )}
+
+          {thisWeekTasks && (
+            <TaskList
+              label="this week"
+              tasks={thisWeekTasks}
+              handleTaskCompleteToggle={(task) => {
+                toggleTaskComplete(task).catch((e) => console.error(e));
+              }}
+            />
+          )}
+
+          {thisMonthTasks && (
+            <TaskList
+              label="this month"
+              tasks={thisMonthTasks}
+              handleTaskCompleteToggle={(task) => {
+                toggleTaskComplete(task).catch((e) => console.error(e));
+              }}
+            />
+          )}
+        </div>
+        <div className="flex min-h-[5rem] grow flex-col items-center justify-end">
           <span>
             powered by <span className="text-brand-purple">dewdayte</span>
           </span>

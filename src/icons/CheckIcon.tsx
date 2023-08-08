@@ -10,9 +10,9 @@ export default function CheckIcon() {
       <path
         d="M2 7.66174L6.03448 12L15.5 2"
         stroke="white"
-        stroke-width="3"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
