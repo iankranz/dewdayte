@@ -71,75 +71,77 @@ export default function SpacePage() {
 
   return (
     <>
-      <main className="flex min-h-screen flex-col p-6 md:max-w-lg">
-        <div className="mb-6 flex items-center justify-between">
-          <Link href="/">
-            <span className="font-spline text-brand-purple">&larr;leave</span>
-          </Link>
-          <DewButton
-            type="primary"
-            padding="sm"
-            width="fit"
-            handleClick={handleNewClick}
-          >
-            +new
-          </DewButton>
-        </div>
-        <h1 className="mb-12 font-spline text-2xl">
-          {getSpaceQuery.data ? getSpaceQuery.data.name : "Loading..."}
-        </h1>
-        {isEmptySpace ? (
-          <div className="w-full text-center">
-            your space is empty!
-            <br />
-            click &quot;+new&quot; to start adding tasks
+      <main className="flex h-full min-h-screen flex-col items-center p-6">
+        <div className="flex h-full w-full grow flex-col md:max-w-2xl">
+          <div className="mb-6 flex items-center justify-between">
+            <Link href="/">
+              <span className="font-spline text-brand-purple">&larr;leave</span>
+            </Link>
+            <DewButton
+              type="primary"
+              padding="sm"
+              width="fit"
+              handleClick={handleNewClick}
+            >
+              +new
+            </DewButton>
           </div>
-        ) : (
-          <div className="flex flex-col gap-12">
-            {Boolean(todayTasks.length) && (
-              <TaskList
-                label="today"
-                tasks={todayTasks}
-                handleTaskCompleteToggle={(task) => {
-                  toggleTaskComplete(task).catch((e) => console.error(e));
-                }}
-                handleArchiveClick={(task) => {
-                  archiveTask(task).catch((e) => console.error(e));
-                }}
-              />
-            )}
+          <h1 className="mb-12 font-spline text-2xl">
+            {getSpaceQuery.data ? getSpaceQuery.data.name : "Loading..."}
+          </h1>
+          {isEmptySpace ? (
+            <div className="w-full text-center">
+              your space is empty!
+              <br />
+              click &quot;+new&quot; to start adding tasks
+            </div>
+          ) : (
+            <div className="flex flex-col gap-12">
+              {Boolean(todayTasks.length) && (
+                <TaskList
+                  label="today"
+                  tasks={todayTasks}
+                  handleTaskCompleteToggle={(task) => {
+                    toggleTaskComplete(task).catch((e) => console.error(e));
+                  }}
+                  handleArchiveClick={(task) => {
+                    archiveTask(task).catch((e) => console.error(e));
+                  }}
+                />
+              )}
 
-            {Boolean(thisWeekTasks.length) && (
-              <TaskList
-                label="this week"
-                tasks={thisWeekTasks}
-                handleTaskCompleteToggle={(task) => {
-                  toggleTaskComplete(task).catch((e) => console.error(e));
-                }}
-                handleArchiveClick={(task) => {
-                  archiveTask(task).catch((e) => console.error(e));
-                }}
-              />
-            )}
+              {Boolean(thisWeekTasks.length) && (
+                <TaskList
+                  label="this week"
+                  tasks={thisWeekTasks}
+                  handleTaskCompleteToggle={(task) => {
+                    toggleTaskComplete(task).catch((e) => console.error(e));
+                  }}
+                  handleArchiveClick={(task) => {
+                    archiveTask(task).catch((e) => console.error(e));
+                  }}
+                />
+              )}
 
-            {Boolean(thisMonthTasks.length) && (
-              <TaskList
-                label="this month"
-                tasks={thisMonthTasks}
-                handleTaskCompleteToggle={(task) => {
-                  toggleTaskComplete(task).catch((e) => console.error(e));
-                }}
-                handleArchiveClick={(task) => {
-                  archiveTask(task).catch((e) => console.error(e));
-                }}
-              />
-            )}
+              {Boolean(thisMonthTasks.length) && (
+                <TaskList
+                  label="this month"
+                  tasks={thisMonthTasks}
+                  handleTaskCompleteToggle={(task) => {
+                    toggleTaskComplete(task).catch((e) => console.error(e));
+                  }}
+                  handleArchiveClick={(task) => {
+                    archiveTask(task).catch((e) => console.error(e));
+                  }}
+                />
+              )}
+            </div>
+          )}
+          <div className="flex min-h-[5rem] grow flex-col items-center justify-end">
+            <span>
+              powered by <span className="text-brand-purple">dewdayte</span>
+            </span>
           </div>
-        )}
-        <div className="flex min-h-[5rem] grow flex-col items-center justify-end">
-          <span>
-            powered by <span className="text-brand-purple">dewdayte</span>
-          </span>
         </div>
       </main>
     </>

@@ -11,7 +11,7 @@ interface Space {
 export default function Home() {
   const [spaces, setSpaces] = useState<Space[]>([]);
 
-  const testSpaceId = "clkn7tzs00008umocjphxpm67";
+  const testSpaceId = process.env.NEXT_PUBLIC_TEST_SPACE_ID;
 
   useEffect(() => {
     const data = window.localStorage.getItem("my-spaces");

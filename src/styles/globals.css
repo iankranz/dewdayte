@@ -7,3 +7,7 @@
 .text-shadow-dewdayte {
   text-shadow: 2px 2px 0px 0px #ffc2e7;
 }
+
+input[type="radio"] {
+  cursor: pointer;
+}
