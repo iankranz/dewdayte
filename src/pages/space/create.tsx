@@ -35,27 +35,29 @@ export default function CreateSpacePage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center gap-16 p-6">
-        <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-          <Link href="/">
-            <span className="text-brand-purple">dewdayte</span>
-          </Link>
-        </h1>
-        <div className="flex flex-col gap-8">
-          <div className="w-full text-5xl text-brand-purple">
-            <Link href="/">&larr;</Link>
+        <div>
+          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+            <Link href="/">
+              <span className="text-brand-purple">dewdayte</span>
+            </Link>
+          </h1>
+          <div className="flex flex-col gap-8">
+            <div className="w-full text-5xl text-brand-purple">
+              <Link href="/">&larr;</Link>
+            </div>
+            <p className="font-spline text-3xl font-bold">
+              what should we call this space?
+            </p>
+            <DewTextInput
+              value={name}
+              handleChange={handleNameChange}
+              label="name"
+              htmlFor="space-name"
+            />
+            <DewButton type="primary" handleClick={createSpace}>
+              let’s go
+            </DewButton>
           </div>
-          <p className="font-spline text-3xl font-bold">
-            what should we call this space?
-          </p>
-          <DewTextInput
-            value={name}
-            handleChange={handleNameChange}
-            label="name"
-            htmlFor="space-name"
-          />
-          <DewButton type="primary" handleClick={createSpace}>
-            let’s go
-          </DewButton>
         </div>
       </main>
     </>

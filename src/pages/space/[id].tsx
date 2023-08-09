@@ -16,14 +16,21 @@ export default function SpacePage() {
 
   const spaceId = (router.query.id ?? null) as string | null;
 
-  const { todayTasks, thisMonthTasks, thisWeekTasks, toggleTaskComplete } =
-    useSpaceTasks(spaceId);
+  const {
+    todayTasks,
+    thisMonthTasks,
+    thisWeekTasks,
+    isEmptySpace,
+    toggleTaskComplete,
+    archiveTask,
+  } = useSpaceTasks(spaceId);
 
-  const space = api.space.get.useQuery({ id: spaceId ?? "" });
-  const room = api.task.create.useMutation();
+  const getSpaceQuery = api.space.get.useQuery({ id: spaceId ?? "" });
+  const createTaskMutation = api.task.create.useMutation();
 
+  // todo: create a custom hook for localstorage logic
   useEffect(() => {
-    if (!space.data?.id || !space.data?.name) return;
+    if (!getSpaceQuery.data?.id || !getSpaceQuery.data?.name) return;
     const data = window.localStorage.getItem("my-spaces");
     let mySpaces = [] as Space[];
     if (data) {
@@ -32,23 +39,23 @@ export default function SpacePage() {
       };
       if (parsedData.spaces) {
         mySpaces = parsedData.spaces?.filter(
-          (mySpace) => mySpace.id !== space.data?.id
+          (mySpace) => mySpace.id !== getSpaceQuery.data?.id
         );
       }
     }
     mySpaces = [
-      { id: space.data?.id, name: space.data?.name },
+      { id: getSpaceQuery.data?.id, name: getSpaceQuery.data?.name },
       ...mySpaces,
     ].slice(0, 5);
     window.localStorage.setItem(
       "my-spaces",
       JSON.stringify({ spaces: mySpaces })
     );
-  }, [space.data?.id, space.data?.name]);
+  }, [getSpaceQuery.data?.id, getSpaceQuery.data?.name]);
 
   function handleNewClick() {
     if (!spaceId) return;
-    room
+    createTaskMutation
       .mutateAsync({
         spaceId: spaceId,
       })
@@ -64,7 +71,7 @@ export default function SpacePage() {
 
   return (
     <>
-      <main className="flex min-h-screen flex-col p-6">
+      <main className="flex min-h-screen flex-col p-6 md:max-w-lg">
         <div className="mb-6 flex items-center justify-between">
           <Link href="/">
             <span className="font-spline text-brand-purple">&larr;leave</span>
@@ -79,39 +86,56 @@ export default function SpacePage() {
           </DewButton>
         </div>
         <h1 className="mb-12 font-spline text-2xl">
-          {space.data ? space.data.name : "Loading..."}
+          {getSpaceQuery.data ? getSpaceQuery.data.name : "Loading..."}
         </h1>
-        <div className="flex flex-col gap-12">
-          {todayTasks && (
-            <TaskList
-              label="today"
-              tasks={todayTasks}
-              handleTaskCompleteToggle={(task) => {
-                toggleTaskComplete(task).catch((e) => console.error(e));
-              }}
-            />
-          )}
+        {isEmptySpace ? (
+          <div className="w-full text-center">
+            your space is empty!
+            <br />
+            click &quot;+new&quot; to start adding tasks
+          </div>
+        ) : (
+          <div className="flex flex-col gap-12">
+            {Boolean(todayTasks.length) && (
+              <TaskList
+                label="today"
+                tasks={todayTasks}
+                handleTaskCompleteToggle={(task) => {
+                  toggleTaskComplete(task).catch((e) => console.error(e));
+                }}
+                handleArchiveClick={(task) => {
+                  archiveTask(task).catch((e) => console.error(e));
+                }}
+              />
+            )}
 
-          {thisWeekTasks && (
-            <TaskList
-              label="this week"
-              tasks={thisWeekTasks}
-              handleTaskCompleteToggle={(task) => {
-                toggleTaskComplete(task).catch((e) => console.error(e));
-              }}
-            />
-          )}
+            {Boolean(thisWeekTasks.length) && (
+              <TaskList
+                label="this week"
+                tasks={thisWeekTasks}
+                handleTaskCompleteToggle={(task) => {
+                  toggleTaskComplete(task).catch((e) => console.error(e));
+                }}
+                handleArchiveClick={(task) => {
+                  archiveTask(task).catch((e) => console.error(e));
+                }}
+              />
+            )}
 
-          {thisMonthTasks && (
-            <TaskList
-              label="this month"
-              tasks={thisMonthTasks}
-              handleTaskCompleteToggle={(task) => {
-                toggleTaskComplete(task).catch((e) => console.error(e));
-              }}
-            />
-          )}
-        </div>
+            {Boolean(thisMonthTasks.length) && (
+              <TaskList
+                label="this month"
+                tasks={thisMonthTasks}
+                handleTaskCompleteToggle={(task) => {
+                  toggleTaskComplete(task).catch((e) => console.error(e));
+                }}
+                handleArchiveClick={(task) => {
+                  archiveTask(task).catch((e) => console.error(e));
+                }}
+              />
+            )}
+          </div>
+        )}
         <div className="flex min-h-[5rem] grow flex-col items-center justify-end">
           <span>
             powered by <span className="text-brand-purple">dewdayte</span>

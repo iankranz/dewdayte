@@ -16,6 +16,11 @@ enum DueCategory {
     THIS_MONTH
 }
 
+enum TaskStatus {
+    ACTIVE
+    ARCHIVED
+}
+
 model Space {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
@@ -34,4 +39,5 @@ model Task {
     spaceId    String   
     completedAt DateTime?
     dueCategory DueCategory?
+    status TaskStatus @default(ACTIVE)
 }

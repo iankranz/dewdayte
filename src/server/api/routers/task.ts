@@ -9,6 +9,7 @@ export const taskRouter = createTRPCRouter({
         data: {
           spaceId: input.spaceId,
           dueCategory: "TODAY",
+          status: "ACTIVE",
         },
       });
       return {
@@ -33,6 +34,7 @@ export const taskRouter = createTRPCRouter({
         dueCategory: z.enum(["TODAY", "THIS_WEEK", "THIS_MONTH"]).optional(),
         description: z.string().max(1000).optional(),
         completedAt: z.date().optional().nullable(),
+        status: z.enum(["ACTIVE", "ARCHIVED"]).optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -45,6 +47,7 @@ export const taskRouter = createTRPCRouter({
           dueCategory: input.dueCategory,
           description: input.description,
           completedAt: input.completedAt,
+          status: input.status,
         },
       });
       return task;

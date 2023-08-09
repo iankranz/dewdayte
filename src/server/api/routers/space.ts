@@ -28,7 +28,7 @@ export const spaceRouter = createTRPCRouter({
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const tasks = await ctx.prisma.task.findMany({
-        where: { spaceId: input.id, dueCategory: "TODAY" },
+        where: { spaceId: input.id, dueCategory: "TODAY", status: "ACTIVE" },
         orderBy: { name: "asc" },
       });
       return { tasks };
@@ -37,7 +37,11 @@ export const spaceRouter = createTRPCRouter({
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const tasks = await ctx.prisma.task.findMany({
-        where: { spaceId: input.id, dueCategory: "THIS_WEEK" },
+        where: {
+          spaceId: input.id,
+          dueCategory: "THIS_WEEK",
+          status: "ACTIVE",
+        },
         orderBy: { name: "asc" },
       });
       return { tasks };
@@ -46,7 +50,11 @@ export const spaceRouter = createTRPCRouter({
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const tasks = await ctx.prisma.task.findMany({
-        where: { spaceId: input.id, dueCategory: "THIS_MONTH" },
+        where: {
+          spaceId: input.id,
+          dueCategory: "THIS_MONTH",
+          status: "ACTIVE",
+        },
         orderBy: { name: "asc" },
       });
       return { tasks };
