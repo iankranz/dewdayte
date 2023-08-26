@@ -2,9 +2,7 @@
 
 dewdayte is a no-fills productivity application for getting sh\*t done. It allows users to create Spaces where they can organize Tasks. A Task can be anything from "pick up some groceries" to "refactor the local storage logic into a custom hook". It's whatever you want!
 
-The app is currently in development, but it's my main side-project. You'll see I've been making tons of commits here.
-
-## How is it being built?
+## How is it built?
 
 As a full stack application, dewdayte makes use of some really cool modern tools including:
 
