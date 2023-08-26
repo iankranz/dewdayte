@@ -30,8 +30,8 @@ export default function TaskViewPanel({
       />
       <p>{task.description}</p>
       <div className="flex flex-col gap-4">
-        <DewButton type="primary">complete</DewButton>
-        <DewButton type="tertiary">delete task</DewButton>
+        {/* <DewButton type="primary">complete</DewButton>
+        <DewButton type="tertiary">delete task</DewButton> */}
       </div>
     </div>
   );

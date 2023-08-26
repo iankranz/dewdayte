@@ -39,12 +39,12 @@ export default function DewRadioInput({
                 name={name}
                 value={input.value}
                 checked={input.value === checked}
-                className="peer absolute z-10 h-full w-full appearance-none rounded-full border border-screw bg-spray checked:bg-brand-purple"
+                className="peer absolute z-10 h-full w-full !cursor-pointer appearance-none rounded-full border border-screw bg-spray checked:bg-brand-purple"
                 onChange={handleRadioInputChange}
               />
               <label
                 htmlFor={input.id}
-                className="relative z-20 text-black peer-checked:text-white"
+                className="relative z-20 cursor-pointer text-black peer-checked:text-white"
               >
                 {input.label}
               </label>

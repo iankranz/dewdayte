@@ -24,11 +24,38 @@ export const spaceRouter = createTRPCRouter({
       });
       return room;
     }),
-  getTasks: publicProcedure
+  getDayTasks: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const tasks = await ctx.prisma.task.findMany({
-        where: { spaceId: input.id },
+        where: { spaceId: input.id, dueCategory: "TODAY", status: "ACTIVE" },
+        orderBy: { name: "asc" },
+      });
+      return { tasks };
+    }),
+  getWeekTasks: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const tasks = await ctx.prisma.task.findMany({
+        where: {
+          spaceId: input.id,
+          dueCategory: "THIS_WEEK",
+          status: "ACTIVE",
+        },
+        orderBy: { name: "asc" },
+      });
+      return { tasks };
+    }),
+  getMonthTasks: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const tasks = await ctx.prisma.task.findMany({
+        where: {
+          spaceId: input.id,
+          dueCategory: "THIS_MONTH",
+          status: "ACTIVE",
+        },
+        orderBy: { name: "asc" },
       });
       return { tasks };
     }),

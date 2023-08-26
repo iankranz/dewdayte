@@ -9,6 +9,7 @@ export const taskRouter = createTRPCRouter({
         data: {
           spaceId: input.spaceId,
           dueCategory: "TODAY",
+          status: "ACTIVE",
         },
       });
       return {
@@ -30,8 +31,10 @@ export const taskRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         name: z.string().max(100).optional(),
-        dueCategory: z.enum(["TODAY", "THIS_WEEK", "THIS_MONTH"]),
+        dueCategory: z.enum(["TODAY", "THIS_WEEK", "THIS_MONTH"]).optional(),
         description: z.string().max(1000).optional(),
+        completedAt: z.date().optional().nullable(),
+        status: z.enum(["ACTIVE", "ARCHIVED"]).optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -43,6 +46,8 @@ export const taskRouter = createTRPCRouter({
           name: input.name,
           dueCategory: input.dueCategory,
           description: input.description,
+          completedAt: input.completedAt,
+          status: input.status,
         },
       });
       return task;

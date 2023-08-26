@@ -54,42 +54,44 @@ export default function TaskPage() {
 
   return (
     <>
-      <main className="flex min-h-screen flex-col p-6">
-        {mode === "edit" ? (
-          <h1 className="mb-8 font-spline text-2xl text-near-black">
-            edit task
-          </h1>
-        ) : (
-          <div className="mb-6 flex items-center justify-between">
-            <Link href={`/space/${task?.spaceId}`}>
-              <span className="text-brand-purple">&larr;</span>
-            </Link>
-            <DewButton
-              type="secondary"
-              handleClick={handleEditClick}
-              width="fit"
-              padding="sm"
-            >
-              edit
-            </DewButton>
+      <main className="flex min-h-screen flex-col items-center">
+        <div className="flex h-full w-full grow flex-col p-6 md:max-w-2xl">
+          {mode === "edit" ? (
+            <h1 className="mb-8 font-spline text-2xl text-near-black">
+              edit task
+            </h1>
+          ) : (
+            <div className="mb-6 flex items-center justify-between">
+              <Link href={`/space/${task?.spaceId}`}>
+                <span className="text-brand-purple">&larr;</span>
+              </Link>
+              <DewButton
+                type="secondary"
+                handleClick={handleEditClick}
+                width="fit"
+                padding="sm"
+              >
+                edit
+              </DewButton>
+            </div>
+          )}
+          {mode === "edit" ? (
+            <TaskEditForm
+              task={task}
+              handleFormDiscard={handleFormDiscard}
+              handleFormSubmit={handleFormSubmit}
+            />
+          ) : (
+            <TaskViewPanel
+              task={task}
+              handleDueCategoryChange={handleDueCategoryChange}
+            />
+          )}
+          <div className="flex grow flex-col items-center justify-end">
+            <span>
+              powered by <span className="text-brand-purple">dewdayte</span>
+            </span>
           </div>
-        )}
-        {mode === "edit" ? (
-          <TaskEditForm
-            task={task}
-            handleFormDiscard={handleFormDiscard}
-            handleFormSubmit={handleFormSubmit}
-          />
-        ) : (
-          <TaskViewPanel
-            task={task}
-            handleDueCategoryChange={handleDueCategoryChange}
-          />
-        )}
-        <div className="flex grow flex-col items-center justify-end">
-          <span>
-            powered by <span className="text-brand-purple">dewdayte</span>
-          </span>
         </div>
       </main>
     </>

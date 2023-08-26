@@ -3,7 +3,8 @@ import { api } from "@/utils/api";
 import { useRouter } from "next/router";
 import DewButton from "@/components/DewButton";
 import { useEffect } from "react";
-import TaskListItem from "@/components/TaskListItem";
+import { useSpaceTasks } from "@/hooks/useSpaceTasks";
+import TaskList from "@/components/TaskList";
 
 interface Space {
   id: string;
@@ -15,12 +16,21 @@ export default function SpacePage() {
 
   const spaceId = (router.query.id ?? null) as string | null;
 
-  const space = api.space.get.useQuery({ id: spaceId ?? "" });
-  const room = api.task.create.useMutation();
-  const getTasksQuery = api.space.getTasks.useQuery({ id: spaceId ?? "" });
+  const {
+    todayTasks,
+    thisMonthTasks,
+    thisWeekTasks,
+    isEmptySpace,
+    toggleTaskComplete,
+    archiveTask,
+  } = useSpaceTasks(spaceId);
 
+  const getSpaceQuery = api.space.get.useQuery({ id: spaceId ?? "" });
+  const createTaskMutation = api.task.create.useMutation();
+
+  // todo: create a custom hook for localstorage logic
   useEffect(() => {
-    if (!space.data?.id || !space.data?.name) return;
+    if (!getSpaceQuery.data?.id || !getSpaceQuery.data?.name) return;
     const data = window.localStorage.getItem("my-spaces");
     let mySpaces = [] as Space[];
     if (data) {
@@ -29,23 +39,23 @@ export default function SpacePage() {
       };
       if (parsedData.spaces) {
         mySpaces = parsedData.spaces?.filter(
-          (mySpace) => mySpace.id !== space.data?.id
+          (mySpace) => mySpace.id !== getSpaceQuery.data?.id
         );
       }
     }
     mySpaces = [
-      { id: space.data?.id, name: space.data?.name },
+      { id: getSpaceQuery.data?.id, name: getSpaceQuery.data?.name },
       ...mySpaces,
     ].slice(0, 5);
     window.localStorage.setItem(
       "my-spaces",
       JSON.stringify({ spaces: mySpaces })
     );
-  }, [space.data?.id, space.data?.name]);
+  }, [getSpaceQuery.data?.id, getSpaceQuery.data?.name]);
 
   function handleNewClick() {
     if (!spaceId) return;
-    room
+    createTaskMutation
       .mutateAsync({
         spaceId: spaceId,
       })
@@ -61,34 +71,78 @@ export default function SpacePage() {
 
   return (
     <>
-      <main className="flex min-h-screen flex-col p-6">
-        <div className="mb-6 flex items-center justify-between">
-          <Link href="/">
-            <span className="font-spline text-brand-purple">&larr;leave</span>
-          </Link>
-          <DewButton
-            type="primary"
-            padding="sm"
-            width="fit"
-            handleClick={handleNewClick}
-          >
-            +new
-          </DewButton>
-        </div>
-        <h1 className="mb-12 font-spline text-2xl">
-          {space.data ? space.data.name : "Loading..."}
-        </h1>
-        <h2 className="mb-3">today</h2>
-        {getTasksQuery.data && (
-          <div className="flex flex-col gap-4">
-            {getTasksQuery.data.tasks.map((task) => {
-              return <TaskListItem task={task} key={task.id} />;
-            })}
+      <main className="flex h-full min-h-screen flex-col items-center p-6">
+        <div className="flex h-full w-full grow flex-col md:max-w-2xl">
+          <div className="mb-6 flex items-center justify-between">
+            <Link href="/">
+              <span className="font-spline text-brand-purple">&larr;leave</span>
+            </Link>
+            <DewButton
+              type="primary"
+              padding="sm"
+              width="fit"
+              handleClick={handleNewClick}
+            >
+              +new
+            </DewButton>
           </div>
-        )}
-        <span>
-          powered by <span className="text-brand-purple">dewdayte</span>
-        </span>
+          <h1 className="mb-12 font-spline text-2xl">
+            {getSpaceQuery.data ? getSpaceQuery.data.name : "Loading..."}
+          </h1>
+          {isEmptySpace ? (
+            <div className="w-full text-center">
+              your space is empty!
+              <br />
+              click &quot;+new&quot; to start adding tasks
+            </div>
+          ) : (
+            <div className="flex flex-col gap-12">
+              {Boolean(todayTasks.length) && (
+                <TaskList
+                  label="today"
+                  tasks={todayTasks}
+                  handleTaskCompleteToggle={(task) => {
+                    toggleTaskComplete(task).catch((e) => console.error(e));
+                  }}
+                  handleArchiveClick={(task) => {
+                    archiveTask(task).catch((e) => console.error(e));
+                  }}
+                />
+              )}
+
+              {Boolean(thisWeekTasks.length) && (
+                <TaskList
+                  label="this week"
+                  tasks={thisWeekTasks}
+                  handleTaskCompleteToggle={(task) => {
+                    toggleTaskComplete(task).catch((e) => console.error(e));
+                  }}
+                  handleArchiveClick={(task) => {
+                    archiveTask(task).catch((e) => console.error(e));
+                  }}
+                />
+              )}
+
+              {Boolean(thisMonthTasks.length) && (
+                <TaskList
+                  label="this month"
+                  tasks={thisMonthTasks}
+                  handleTaskCompleteToggle={(task) => {
+                    toggleTaskComplete(task).catch((e) => console.error(e));
+                  }}
+                  handleArchiveClick={(task) => {
+                    archiveTask(task).catch((e) => console.error(e));
+                  }}
+                />
+              )}
+            </div>
+          )}
+          <div className="flex min-h-[5rem] grow flex-col items-center justify-end">
+            <span>
+              powered by <span className="text-brand-purple">dewdayte</span>
+            </span>
+          </div>
+        </div>
       </main>
     </>
   );
