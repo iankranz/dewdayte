@@ -12,24 +12,31 @@ export default function TaskListItem({
   handleArchiveClick: () => void;
 }) {
   return (
-    <div className="flex w-full items-center gap-3 rounded bg-spray p-4">
-      <DewCheckbox
-        handleInputChange={handleTaskCompleteToggle}
-        checked={Boolean(task.completedAt)}
-      />
+    <div className="flex h-fit w-full items-center rounded bg-spray">
+      <div className="py-4 pl-4">
+        <DewCheckbox
+          handleInputChange={handleTaskCompleteToggle}
+          checked={Boolean(task.completedAt)}
+        />
+      </div>
 
-      <span className="">{task.name ?? "untitled"}</span>
+      <Link href={`/task/${task.id}`} className="flex h-16 items-center pl-6">
+        <div>{task.name ?? "untitled"}</div>
+      </Link>
 
-      <div className="flex grow justify-end">
+      <div className="flex h-16 grow items-center justify-end">
         {task.completedAt ? (
           <span
-            className="cursor-pointer font-spline text-brand-purple"
+            className="cursor-pointer pr-4 font-spline text-brand-purple"
             onClick={handleArchiveClick}
           >
-            archive
+            delete
           </span>
         ) : (
-          <Link href={`/task/${task.id}`}>
+          <Link
+            href={`/task/${task.id}`}
+            className="flex h-full w-full items-center justify-end pr-4"
+          >
             <ChevronIcon />
           </Link>
         )}

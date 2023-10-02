@@ -80,7 +80,7 @@ export default function TaskEditPanel({
         label="description"
         htmlFor="task-description-textarea"
       />
-      <div>
+      <div className="flex flex-col gap-4">
         <DewButton type="primary" handleClick={handleDoneClick}>
           done
         </DewButton>
